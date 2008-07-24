@@ -4,7 +4,7 @@
 Plugin Name: Vote the Post
 Plugin URI: http://www.1800blogger.com/word-press-voting-plugin/
 Description: Rate posts from one to five.
-Version: 1.0
+Version: 1.1
 Author: Crowd Favorite
 Author URI: http://crowdfavorite.com/
 */
@@ -234,7 +234,16 @@ function ratepost_the_content($content = '') {
 
 	if(!is_feed() and !is_trackback() and !is_page()) {
 		$display_rating = $ratepost->display_rating($post->ID, $userdata->ID, $_SERVER['REMOTE_ADDR'], $_COOKIE['wordpress_ratepost']);
-		return sprintf('%s%s', $content, $display_rating);
+
+		$top_or_bottom = get_option('ratepost_top_or_bottom');
+		$top_or_bottom = empty($top_or_bottom) ? 'bottom' : $top_or_bottom;
+		
+		if($top_or_bottom == 'top') {
+			return sprintf('%s%s', $display_rating, $content);
+		}
+		else {
+			return sprintf('%s%s', $content, $display_rating);
+		}		
 	}
 	return $content;
 }
@@ -451,6 +460,8 @@ function ratepost_options() {
 	$max_votes_ip = $max_votes_ip == '' ? 25 : $max_votes_ip;
 	$hide_more_info = get_option('ratepost_hide_more_info');
 	$hide_more_info = empty($hide_more_info) ? false : $hide_more_info;
+	$top_or_bottom = get_option('ratepost_top_or_bottom');
+	$top_or_bottom = empty($top_or_bottom) ? 'bottom' : $top_or_bottom;
 
 	$caption = 'Save Options';
 
@@ -461,8 +472,25 @@ function ratepost_options() {
 		}
 		$hide_more_info = isset($_POST['hide_more_info']);
 		update_option('ratepost_hide_more_info', $hide_more_info);
+		
+		if(!empty($_POST['top_or_bottom']) && in_array($_POST['top_or_bottom'], array('top','bottom'))) {
+			$top_or_bottom = $_POST['top_or_bottom'];
+		}
+		else {
+			$top_or_bottom = 'bottom';
+		}
+		update_option('ratepost_top_or_bottom', $top_or_bottom);
 	}
 	$hide_more_info = $hide_more_info ? 'checked="checked" ' : '';
+	
+	if($top_or_bottom == 'top') {
+		$top = ' selected=selected';
+		$bottom = '';
+	}
+	else {
+		$top = '';
+		$bottom = ' selected=selected';
+	}
 ?>
 <div class="wrap">
 	<h2>Vote the Post Options</h2>
@@ -477,6 +505,10 @@ function ratepost_options() {
 				<tr>
 					<th width="33%" scope="row">Hide more information link:</th>
 					<td width="67%"><input type="checkbox" <?php echo $hide_more_info; ?>name="hide_more_info" /></td>
+				</tr>
+				<tr>
+					<th width="33%" scope="row">Stars on top or bottom of post:</th>
+					<td width="67%"><select name="top_or_bottom"><option value="bottom"<?php echo $bottom; ?>>Bottom</option><option value="top"<?php echo $top; ?>>Top</option></select>
 				</tr>
 			</table>
 			<div class="submit"><input type="submit" name="action" value="<?php echo $caption; ?>" /></div>

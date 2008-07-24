@@ -2,8 +2,8 @@
 Tags: voting, feedback, star, statistics, stats, rating
 Contributors: alexkingorg
 Requires at least: 2.2
-Tested up to: 2.5.1
-Stable tag: 1.0
+Tested up to: 2.6
+Stable tag: 1.1
 
 Let users vote on the posts at your blog.
 
@@ -17,7 +17,7 @@ Vote-the-Post allows users to rate each post from one to five stars. Vote-the-Po
 2. Upload the Vote-the-Post directory to your wp-content/plugins directory.
 3. Go to the Plugins page in your WordPress Administration area and click 'Activate' for Vote-the-Post. This will create the database table used by Vote-the-Post.
 4. Congratulations! You've just installed Vote-the-Post and users can now rate your posts.
-5. Optional: go into Options > Vote-the-Post to modify the number of times a particular IP address can vote per post.
+5. Optional: go into Options > Vote-the-Post to modify the number of times a particular IP address can vote per post or whether the voting interface and results appear at the top or the bottom of the blog post.
 
 == Hooks ==
 
